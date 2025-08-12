@@ -1,0 +1,37 @@
+<div class="boards-page">
+  <header class="boards-header">
+    <h1 class="boards-title">
+      Boards
+    </h1>
+    <%= button_to "+ New Board", boards_path, method: :post, class: "create-button" %>
+  </header>
+
+  <main class="boards-main" role="main">
+    <section class="boards-section">
+      <% if @boards.empty? %>
+        <div class="empty-state" role="status">
+          <p>
+            No boards yet. Create your first board to get started.
+          </p>
+        </div>
+      <% else %>
+        <ul class="board-list">
+          <% @boards.each do |board| %>
+            <%= link_to board_path(id: board.id), style: "text-decoration: none" do %>
+              <li class="board-card" aria-label="<%= "Board #{board.id}" %>">
+                <div class="board-card-body">
+                  <span class="board-name">
+                    <%= "Board #{board.id}" %>
+                  </span>
+                  <time class="board-meta" dateTime="<%= board.created_at %>">
+                    <%= board.created_at %>
+                  </time>
+                </div>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      <% end %>
+    </section>
+  </main>
+</div>
