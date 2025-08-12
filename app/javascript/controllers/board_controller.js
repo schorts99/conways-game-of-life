@@ -8,16 +8,45 @@ const MOUSE_BUTTON_PRIMARY = 1
 
 // Connects to data-controller="board"
 export default class extends Controller {
-  static targets = ["canvas", "startButton", "clearButton"]
+  static values = { board: Object }
+  static targets = ["canvas", "startButton", "clearButton", "nextButton"]
 
   connect() {
     this.canvasContext = this.canvasTarget.getContext("2d")
     this.running = false
     this.board = new Board()
+
+    if (this.boardValue.grid.length) {
+      this.board.fillWithJSON(this.boardValue.grid)
+    } else {
+      this.board.initializeGrid()
+    }
+
     this.boardChannel = createBoardChannel(window.location.href.split("/").pop())
 
     this.#addMouseHandlers()
     this.#draw()
+  }
+
+  disconnect() {
+    this.#removeMouseHandlers()
+  }
+
+  next() {
+    this.board.checkNeighbors()
+    this.board.nextGeneration()
+    this.boardChannel.send({ action: "receive", grid: this.board.toJSON() })
+  }
+
+  start() {
+    this.running = !this.running
+    this.startButtonTarget.textContent = this.running ? "Stop" : "Start"
+    this.clearButtonTarget.disabled = this.running
+    this.nextButtonTarget.disabled =this.running
+  }
+
+  clear() {
+    this.board = new Board(this.canvasContext)
   }
 
   #draw() {
@@ -28,9 +57,7 @@ export default class extends Controller {
     this.canvasContext.clearRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT)
 
     if (this.running) {
-      this.board.checkNeighbors()
-      this.board.nextGeneration()
-      this.boardChannel.send({ action: "receive", grid: this.board.toJSON() })
+      this.next()
     }
 
     this.board.draw(this.canvasContext)
@@ -77,15 +104,5 @@ export default class extends Controller {
     const y = Math.floor(event.offsetY / CELL_HEIGHT)
 
     this.board.toggleCellAlive(x, y, event.buttons === MOUSE_BUTTON_PRIMARY)
-  }
-
-  start() {
-    this.running = !this.running
-    this.startButtonTarget.textContent = this.running ? "Stop" : "Start"
-    this.clearButtonTarget.disabled = this.running
-  }
-
-  clear() {
-    this.board = new Board(this.canvasContext)
   }
 }

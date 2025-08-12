@@ -4,7 +4,7 @@ const HEIGHT = 48
 import Cell from "./cell"
 
 export default class Board {
-  constructor() {
+  initializeGrid() {
     this.grid = []
 
     for (let x = 0; x < WIDTH; x++) {
@@ -46,6 +46,21 @@ export default class Board {
 
   toJSON() {
     return this.grid.map((row) => row.map(cell => cell.toJSON()))
+  }
+
+  fillWithJSON(json) {
+    this.grid = []
+    const width = json.length
+    const height = json[0].length
+
+    for (let x = 0; x < width; x++) {
+      this.grid[x] = []
+
+      for (let y = 0; y < height; y++) {
+        let cellJSON = json[x][y]
+        this.grid[x][y] = Cell.fromJSON(cellJSON)
+      }
+    }
   }
 }
 

@@ -49,6 +49,14 @@ export default class Cell {
     }
   }
 
+  static fromJSON(json) {
+    return new Cell(
+      json["board_x"],
+      json["board_y"],
+      json["alive"]
+    )
+  }
+
   #getNeighbors(board) {
     const neighbors = []
 
