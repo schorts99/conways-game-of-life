@@ -43,6 +43,10 @@ export default class Board {
   toggleCellAlive(x, y, alive) {
     this.grid[x][y].alive = alive
   }
+
+  toJSON() {
+    return this.grid.map((row) => row.map(cell => cell.toJSON()))
+  }
 }
 
 export { WIDTH, HEIGHT }

@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 import Board, { WIDTH as BOARD_WIDTH, HEIGHT as BOARD_HEIGHT } from "../board/board"
 import { WIDTH as CELL_WIDTH, HEIGHT as CELL_HEIGHT } from "../board/cell"
+import createBoardChannel from "../channels/board_channel"
 
 const MOUSE_BUTTON_PRIMARY = 1
 
@@ -13,6 +14,7 @@ export default class extends Controller {
     this.canvasContext = this.canvasTarget.getContext("2d")
     this.running = false
     this.board = new Board()
+    this.boardChannel = createBoardChannel(window.location.href.split("/").pop())
 
     this.#addMouseHandlers()
     this.#draw()
@@ -28,6 +30,7 @@ export default class extends Controller {
     if (this.running) {
       this.board.checkNeighbors()
       this.board.nextGeneration()
+      this.boardChannel.send({ action: "receive", grid: this.board.toJSON() })
     }
 
     this.board.draw(this.canvasContext)

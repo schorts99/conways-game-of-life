@@ -41,6 +41,14 @@ export default class Cell {
     this.alive = this.nextGenAlive 
   }
 
+  toJSON() {
+    return {
+      board_x: this.boardX,
+      board_y: this.boardY,
+      alive: this.alive,
+    }
+  }
+
   #getNeighbors(board) {
     const neighbors = []
 
