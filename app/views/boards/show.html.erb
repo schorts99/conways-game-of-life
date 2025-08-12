@@ -1,12 +1,26 @@
-<div data-controller="board">
-  <canvas data-board-target="canvas"></canvas>
-  <button data-board-target="startButton" data-action="click->board#start">
-    Start
-  </button>
-  <button data-action="click->board#next">
-    Next
-  </button>
-  <button data-board-target="clearButton" data-action="click->board#clear">
-    Clear
-  </button>
+<div class="boards-page" data-controller="board" data-board-board-value="<%= @board.to_json %>">
+  <header class="boards-header">
+    <h1 class="boards-title">
+      Board <%= @board.id %>
+    </h1>
+    <div class="board-toolbar" role="group" aria-label="Board controls">
+      <button data-board-target="startButton" data-action="click->board#start" class="create-button" aria-label="Start">
+        Start
+      </button>
+      <button data-board-target="nextButton" data-action="click->board#next" class="create-button" aria-label="Next">
+        Next
+      </button>
+      <button data-board-target="clearButton" data-action="click->board#clear" class="create-button" aria-label="Clear">
+        Clear
+      </button>
+    </div>
+  </header>
+
+  <main class="boards-main" role="main">
+    <section class="boards-section" aria-labelledby="canvas-heading">
+      <article class="canvas-wrap" aria-label="Interactive board canvas">
+        <canvas data-board-target="canvas" class="board-canvas" />
+      </article>
+    </section>
+  </main>
 </div>

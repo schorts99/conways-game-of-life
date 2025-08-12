@@ -1,0 +1,31 @@
+.board-toolbar {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.canvas-wrap {
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) + 2px);
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  box-shadow: var(--shadow-soft);
+  padding: 0.5rem;
+}
+
+.board-canvas {
+  display: block;
+  margin: auto;
+  border-radius: calc(var(--radius));
+  background: hsl(var(--card));
+}
+
+.board-toolbar .create-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-toolbar .create-button {
+    transition: none;
+  }
+}
