@@ -12,5 +12,9 @@ class BoardsController < ApplicationController
   end
 
   def show
+    board_finder = ::Boards::Find::BoardFinder.new
+    @board = board_finder.find(params[:id])
+
+    redirect_to root_path unless @board
   end
 end
